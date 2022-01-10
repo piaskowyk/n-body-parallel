@@ -21,9 +21,8 @@ class FastParallelRing:
 
     def __init__(self, current_space_size=5, space: list[Star] = None):
         if space:
-            start = (self.process_id + 1) * current_space_size - current_space_size
-            stop = (self.process_id + 2) * current_space_size - current_space_size
-            self.local_space = space[start:stop]
+            current_space_size = int(len(space) / self.process_count)
+            self.local_space = space[self.process_id * current_space_size:self.process_id * (current_space_size + 1)]
         else:
             self.local_space = Space.generate_space(current_space_size)
 
@@ -49,7 +48,9 @@ class FastParallelRing:
         self.comm.send(self.received_space, dest=destination)
         self.received_space = self.comm.recv(source=source)
         for i in range(len(self.local_space)):
-            self.local_space[i].distance_vector_sum_buffer.add(self.received_space[i].distance_vector_sum_buffer)
+            self.local_space[i].distance_vector_sum_buffer.add(
+                self.received_space[i].distance_vector_sum_buffer
+            )
 
         for star in self.local_space:
             star.update_distance_vector_sum_buffer(self.local_space)

@@ -18,6 +18,7 @@ class ParallelRing:
 
     def __init__(self, current_space_size=5, space: list[Star] = None):
         if space:
+            current_space_size = int(len(space) / self.process_count)
             self.local_space = space[self.process_id * current_space_size:self.process_id * (current_space_size + 1)]
         else:
             self.local_space = Space.generate_space(current_space_size)
@@ -38,4 +39,3 @@ class ParallelRing:
 
         for star in self.local_space:
             star.calc_force_from_buffer()
-            star.force.print()

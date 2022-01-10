@@ -6,9 +6,10 @@ from src.struct.star import Star
 class Sequence:
     space: list[Star] = []
 
-    def run(self, generate_space=True, do_print=True):
-        if generate_space:
-            self.space = Space.generate_space(5)
+    def __init__(self, space: list[Star] = None):
+        self.space = space
+
+    def run(self, do_print=True):
         for star in self.space:
             star.calc_force(self.space)
             if do_print:

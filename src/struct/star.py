@@ -2,7 +2,7 @@ from __future__ import annotations
 from src.struct.point_3d import Point3d
 from src.struct.vector_3d import Vec3d
 
-G = 6.6743015e-3
+G = 6.6743015e-10
 
 
 class Star:
@@ -11,18 +11,23 @@ class Star:
     force: Vec3d = Vec3d()
     velocity: Vec3d = Vec3d()
     distance_vector_sum_buffer: Vec3d = Vec3d()
+    star_id: str = None
 
-    def __init__(self, position: Point3d, mass: float):
+    def __init__(self, position: Point3d, mass: float, star_id: str):
         self.position = position
         self.mass = mass
+        self.star_id = star_id
 
     def get_distance_vector_sum(self, space: list[Star]) -> Vec3d:
         vector_sum = Vec3d()
         for star in space:
-            if star == self:
+            if star.star_id == self.star_id:
                 continue
             distance = self.position.distance_to_point(star.position)
             distance_vector = Vec3d.from_points(star.position, self.position)
+            distance_factor = distance ** 3
+            if distance_factor == 0:  # i ignore collision etc
+                continue
             distance_vector.multiple_by_scalar(star.mass / distance ** 3)
             vector_sum.add(distance_vector)
         return vector_sum

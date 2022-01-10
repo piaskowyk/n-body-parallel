@@ -3,8 +3,14 @@ from __future__ import annotations
 import json
 from random import randint
 
+from mpi4py import MPI
+import mpi4py.MPI
+
 from src.struct.point_3d import Point3d
 from src.struct.star import Star
+
+comm: mpi4py.MPI.Intracomm = MPI.COMM_WORLD
+process_id: int = comm.Get_rank()
 
 
 class Space:
@@ -13,9 +19,10 @@ class Space:
         return [
             Star(
                 Point3d(randint(0, 100), randint(0, 100), randint(0, 100)),
-                randint(0, 10000) / 100
+                randint(0, 10000) / 100,
+                f'{process_id}_{index}'
             )
-            for _ in range(size)
+            for index in range(size)
         ]
 
     @staticmethod
@@ -38,11 +45,12 @@ class Space:
         content = []
         with open('space.json', 'r') as file:
             json_content = json.loads(file.read())
-        for json_star in json_content:
+        for index, json_star in enumerate(json_content):
             content.append(
                 Star(
                     Point3d(json_star["position"]["x"], json_star["position"]["y"], json_star["position"]["z"]),
-                    json_star["mass"]
+                    json_star["mass"],
+                    f'{process_id}_{index}'
                 )
             )
         return content

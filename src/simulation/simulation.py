@@ -93,4 +93,4 @@ class Simulation:
         for star in self.local_space:
             star.update_distance_vector_sum_buffer(self.local_space)
             star.calc_force_from_buffer()
-            star.force.print()
+            # star.force.print()
