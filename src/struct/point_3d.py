@@ -24,3 +24,8 @@ class Point3d:
 
     def copy(self) -> Point3d:
         return Point3d(self.x, self.y, self.z)
+
+    def add(self, point: Point3d):
+        self.x += point.x
+        self.y += point.y
+        self.z += point.z

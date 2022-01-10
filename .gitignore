@@ -3,4 +3,6 @@ venv_wsl
 .idea
 src/algorythm/__pycache__/
 src/struct/__pycache__/
+src/simulation/__pycache__/
+simulation_data
 space.json

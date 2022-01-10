@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from src.algorythm.fast_parallel_ring import FastParallelRing
-from src.algorythm.parallel_ring import ParallelRing
 from src.algorythm.sequence import Sequence
+from src.simulation.simulation import Simulation
 from src.struct.space import Space
 from src.struct.star import Star
 
@@ -18,7 +17,7 @@ process_count: int = comm.Get_size()
 #     Space.to_json(global_space)
 global_space = Space.load_json()
 
-parallel_ring = FastParallelRing(4, global_space)
+parallel_ring = Simulation(4, global_space)
 parallel_ring.run()
 
 sequence = Sequence()
