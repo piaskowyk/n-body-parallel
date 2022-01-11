@@ -18,8 +18,8 @@ class Space:
     def generate_space(size: int) -> list[Star]:
         return [
             Star(
-                Point3d(randint(0, 100), randint(0, 100), randint(0, 100)),
-                randint(0, 10000) / 100,
+                Point3d(randint(-100, 100), randint(-100, 100), randint(-100, 100)),
+                randint(10, 10000) / 100,
                 f'{process_id}_{index}'
             )
             for index in range(size)

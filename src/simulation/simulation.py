@@ -24,14 +24,16 @@ class Simulation:
     d_time: float = 0.5
 
     simulation_buffer = []
+    is_measure = False
 
-    def __init__(self, current_space_size=5, space: list[Star] = None, iteration_count: int = 1000):
+    def __init__(self, current_space_size=5, space: list[Star] = None, iteration_count: int = 1):
         if space:
             start = (self.process_id + 1) * current_space_size - current_space_size
             stop = (self.process_id + 2) * current_space_size - current_space_size
             self.local_space = space[start:stop]
         else:
             self.local_space = Space.generate_space(current_space_size)
+            self.is_measure = True
         self.iteration_count = iteration_count
 
     def run(self):
@@ -41,7 +43,8 @@ class Simulation:
             self.update_position()
             self.clear_local_space()
             self.current_iteration = i
-        self.dump_data(True)
+        if not self.is_measure:
+            self.dump_data(True)
 
     def clear_local_space(self):
         for star in self.local_space:
@@ -84,7 +87,7 @@ class Simulation:
         destination = (self.process_id - interaction_count) \
             if (self.process_id - interaction_count) > -1 \
             else self.process_id - interaction_count + self.process_count
-        source = (self.process_id - interaction_count) % self.process_count
+        source = (self.process_id + interaction_count) % self.process_count
         self.comm.send(self.received_space, dest=destination)
         self.received_space = self.comm.recv(source=source)
         for i in range(len(self.local_space)):
@@ -93,4 +96,3 @@ class Simulation:
         for star in self.local_space:
             star.update_distance_vector_sum_buffer(self.local_space)
             star.calc_force_from_buffer()
-            # star.force.print()

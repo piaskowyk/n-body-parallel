@@ -23,3 +23,8 @@ class Vec3d(Point3d):
 
     def copy(self) -> Vec3d:
         return Vec3d(self.x, self.y, self.z)
+
+    def neg(self):
+        self.x *= -1
+        self.y *= -1
+        self.z *= -1

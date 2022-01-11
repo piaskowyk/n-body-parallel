@@ -17,11 +17,13 @@ for file_name in glob.glob("simulation_data/*.json"):
         stars_data[star_id][1].append(star['star']['y'])
         stars_data[star_id][2].append(star['star']['z'])
 
+
 def update(num, data, line):
     line.set_data(data[:2, :num])
     line.set_3d_properties(data[2, :num])
 
-N = 900
+
+N = 1500
 
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')

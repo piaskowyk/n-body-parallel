@@ -44,7 +44,7 @@ class FastParallelRing:
         destination = (self.process_id - interaction_count) \
             if (self.process_id - interaction_count) > -1 \
             else self.process_id - interaction_count + self.process_count
-        source = (self.process_id - interaction_count) % self.process_count
+        source = (self.process_id + interaction_count) % self.process_count
         self.comm.send(self.received_space, dest=destination)
         self.received_space = self.comm.recv(source=source)
         for i in range(len(self.local_space)):
@@ -55,4 +55,3 @@ class FastParallelRing:
         for star in self.local_space:
             star.update_distance_vector_sum_buffer(self.local_space)
             star.calc_force_from_buffer()
-            star.force.print()
